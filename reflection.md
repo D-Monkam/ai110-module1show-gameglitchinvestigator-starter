@@ -5,8 +5,12 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 ## 1. What was broken when you started?
 
 - What did the game look like the first time you ran it?
+  
 - List at least two concrete bugs you noticed at the start  
   (for example: "the secret number kept changing" or "the hints were backwards").
+
+  There was nothing wrong with game a a first glance. It wasn't till I started playing that I noticed some issues. One issues was with the hint displayed when guessing whether a val was higher or lower than the secret being very inaccurate. Another was that the score displayed when guessing the correct number is different from the actual score displayed in the Developer Debug menu. The last one I encountered was after guessing the correct number starting a new game would change the secret number but the 'Submit Guess' button would
+  stop working.
 
 ---
 
