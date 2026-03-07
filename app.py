@@ -73,8 +73,10 @@ with col3:
 
 # FIXME: Logic breaks here
 if new_game:
-    st.session_state.attempts = 0
-    st.session_state.secret = random.randint(1, 100)
+    #FIX While focusing on the bug below Copilot also identfied this bug. Was set to 0 but it's expected to be 1
+    st.session_state.attempts = 1
+    #FIX Replaced '1' and '100' wiht low and high to represent the bounds based on difficulty. This was pointed out to be my copiolot as well as the fix
+    st.session_state.secret = random.randint(low, high)
     st.success("New game started.")
     st.rerun()
 
