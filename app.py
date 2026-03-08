@@ -48,7 +48,7 @@ if "history" not in st.session_state:
 if "last_hint" not in st.session_state:
     st.session_state.last_hint = None
 
-#FIX Noticed that there was an issue with incorret secret values when switching difficulties so I asked Claude for a fix and this is was it suggested
+#FIX Noticed that there was an issue with incorrect secret values when switching difficulties so I asked Claude for a fix and this is was it suggested
 if st.session_state.get("difficulty") != difficulty:
     st.session_state.difficulty = difficulty
     st.session_state.secret = random.randint(low, high)
@@ -101,8 +101,9 @@ if st.session_state.status != "playing":
     st.stop()
 
 #FIX History Bug Fix (See line 91)
+hint_placeholder = st.empty()
 if st.session_state.last_hint:
-    st.warning(st.session_state.last_hint)
+    hint_placeholder.warning(st.session_state.last_hint)
 
 if submit:
     st.session_state.attempts += 1
@@ -131,6 +132,9 @@ if submit:
 
         if outcome == "Win":
             st.balloons()
+            #FIX History Bug Fix (See line 91)
+            st.session_state.last_hint = None
+            hint_placeholder.empty()
             st.session_state.status = "won"
             st.success(
                 f"You won! The secret was {st.session_state.secret}. "
