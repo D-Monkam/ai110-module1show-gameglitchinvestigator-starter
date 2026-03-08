@@ -44,15 +44,21 @@ if "status" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
-#FIX History Bug FiX (See line 84)
+#FIX History Bug Fix (See line 91)
 if "last_hint" not in st.session_state:
     st.session_state.last_hint = None
 
+#FIX Noticed that there was an issue with incorret secret values when switching difficulties so I asked Claude for a fix and this is was it suggested
+if st.session_state.get("difficulty") != difficulty:
+    st.session_state.difficulty = difficulty
+    st.session_state.secret = random.randint(low, high)
+
 st.subheader("Make a guess")
 
+#FIX Thought something was off here so I asked Claude and it highlighted what needed to be changed
 st.info(
-    f"Guess a number between 1 and 100. "
-    f"Attempts left: {attempt_limit - st.session_state.attempts}"
+    f"Guess a number between {low} and {high}. "
+    f"Attempts left: {attempt_limit - st.session_state.attempts + 1}"
 )
 
 with st.expander("Developer Debug Info"):
@@ -94,7 +100,7 @@ if st.session_state.status != "playing":
         st.error("Game over. Start a new game to try again.")
     st.stop()
 
-#FIX History Bug FiX (See line 84)
+#FIX History Bug Fix (See line 91)
 if st.session_state.last_hint:
     st.warning(st.session_state.last_hint)
 
@@ -138,8 +144,8 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
+            #FIX History Bug Fix (See line 91)
+            st.rerun()
         
-        #FIX History Bug FiX (See line 84)
-        st.rerun()
 st.divider()
 st.caption("Built by an AI that claims this code is production-ready.")
