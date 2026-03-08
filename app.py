@@ -44,6 +44,10 @@ if "status" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
+#FIX History Bug FiX (See line 84)
+if "last_hint" not in st.session_state:
+    st.session_state.last_hint = None
+
 st.subheader("Make a guess")
 
 st.info(
@@ -71,12 +75,15 @@ with col2:
 with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
-# FIXME: Logic breaks here
 if new_game:
     #FIX While focusing on the bug below Copilot also identfied this bug. Was set to 0 but it's expected to be 1
     st.session_state.attempts = 1
+    #FIX Was still having issues with 'submit guess' not working and copilot pointed out that I needed to include this to set the status appropiately
+    st.session_state.status = "playing"
     #FIX Replaced '1' and '100' wiht low and high to represent the bounds based on difficulty. This was pointed out to be my copiolot as well as the fix
     st.session_state.secret = random.randint(low, high)
+    #FIX This line and multiple line labeled history bug fix have to do with a bug that Claude identfied being the discrepency between submitting a val and it appearing in the history
+    st.session_state.last_hint = None
     st.success("New game started.")
     st.rerun()
 
@@ -86,6 +93,10 @@ if st.session_state.status != "playing":
     else:
         st.error("Game over. Start a new game to try again.")
     st.stop()
+
+#FIX History Bug FiX (See line 84)
+if st.session_state.last_hint:
+    st.warning(st.session_state.last_hint)
 
 if submit:
     st.session_state.attempts += 1
@@ -104,7 +115,7 @@ if submit:
         outcome, message = check_guess(guess_int, secret)
 
         if show_hint:
-            st.warning(message)
+            st.session_state.last_hint = message
 
         st.session_state.score = update_score(
             current_score=st.session_state.score,
@@ -127,6 +138,8 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
-
+        
+        #FIX History Bug FiX (See line 84)
+        st.rerun()
 st.divider()
 st.caption("Built by an AI that claims this code is production-ready.")
