@@ -111,15 +111,13 @@ if submit:
     ok, guess_int, err = parse_guess(raw_guess)
 
     if not ok:
-        st.session_state.history.append(raw_guess)
+        st.session_state.history.append({"guess": raw_guess, "hint": err})
         st.error(err)
     else:
-        st.session_state.history.append(guess_int)
-
         #FIX Removed if statement that caused the high/low bug using copilot ask to first identify where it was occuring
         secret = st.session_state.secret
-
         outcome, message = check_guess(guess_int, secret)
+        st.session_state.history.append({"guess": guess_int, "hint": message})
 
         if show_hint:
             st.session_state.last_hint = message
@@ -152,4 +150,11 @@ if submit:
             st.rerun()
         
 st.divider()
+
+# FEATURE Added guest history feature. Thought that only knowing guess hisotry through the dedug menu wasn't enough. I asked Copilot
+# what I can do to add this feature in the simplest way possible without breaking anything. This is what agent mode created.
+if st.session_state.history:
+    st.subheader("Guess History")
+    st.table(st.session_state.history)
+
 st.caption("Built by an AI that claims this code is production-ready.")

@@ -1,5 +1,13 @@
 def get_range_for_difficulty(difficulty: str):
-    """Return (low, high) inclusive range for a given difficulty."""
+    """
+    Return (low, high) inclusive range for a given difficulty.
+
+    Args:
+        difficulty (str): The difficulty level, one of "Easy", "Normal", or "Hard".
+
+    Returns:
+        tuple[int, int]: A tuple containing the lower and upper bounds of the range.
+    """
     if difficulty == "Easy":
         return 1, 20
     if difficulty == "Normal":
@@ -13,7 +21,16 @@ def parse_guess(raw: str):
     """
     Parse user input into an int guess.
 
-    Returns: (ok: bool, guess_int: int | None, error_message: str | None)
+    Handles empty strings, non-numeric input, and floats by truncating.
+
+    Args:
+        raw (str): The raw string input from the user.
+
+    Returns:
+        tuple[bool, int | None, str | None]: A tuple containing:
+            - bool: True if parsing was successful, False otherwise.
+            - int | None: The parsed integer if successful, otherwise None.
+            - str | None: An error message if parsing failed, otherwise None.
     """
     if raw is None:
         return False, None, "Enter a guess."
@@ -32,21 +49,39 @@ def parse_guess(raw: str):
     return True, value, None
 
 
-def check_guess(guess, secret):
+def check_guess(guess: int, secret: int):
     """
-    Compare guess to secret and return (outcome, message).
+    Compare guess to secret and return an outcome and a message.
 
-    outcome examples: "Win", "Too High", "Too Low"
+    Args:
+        guess (int): The user's guess.
+        secret (int): The secret number.
+
+    Returns:
+        tuple[str, str]: A tuple containing:
+            - str: The outcome of the guess ("Win", "Too High", "Too Low").
+            - str: A message to display to the user.
     """
     if guess == secret:
         return "Win", "🎉 Correct!"
-    if guess > secret:
+    elif guess > secret:
         return "Too High", "📈 Go LOWER!"
-    return "Too Low", "📉 Go HIGHER!"
+    else:
+        return "Too Low", "📉 Go HIGHER!"
 
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
-    """Update score based on outcome and attempt number."""
+    """
+    Update score based on the outcome of the guess and the attempt number.
+
+    Args:
+        current_score (int): The player's current score.
+        outcome (str): The outcome of the guess ("Win", "Too High", "Too Low").
+        attempt_number (int): The current attempt number.
+
+    Returns:
+        int: The updated score.
+    """
     if outcome == "Win":
         points = 100 - 10 * (attempt_number + 1)
         if points < 10:

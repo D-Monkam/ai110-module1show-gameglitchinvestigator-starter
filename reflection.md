@@ -41,6 +41,7 @@ After fixing a bug, I would go to the webpage, reload it, and check if the bug w
 - What change did you make that finally gave the game a stable secret number?
 
 The secret number kept changing because when a player hits the "New Game" button, a new game would start, and the secret value would change. Streamlit "reruns" can be seen as refreshing the page to take into account new values that have been calculated in the application. Session state are universal variables that are prevalent across reruns. I didn't particularly make anything, but the reason the secret number is stable is because it's being stored in the session state.
+
 ---
 
 ## 5. Looking ahead: your developer habits
